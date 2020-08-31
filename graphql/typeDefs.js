@@ -1,4 +1,4 @@
-const gql = require("graphql-tag");
+const {gql} = require("apollo-server");
 //can export from apollo-server
 
 module.exports = gql`
@@ -15,7 +15,7 @@ module.exports = gql`
     imgUrl: String
     name: String!
     capital: String!
-    continent: Continent
+    continent: Continent!
   }
   type Comment {
     id: ID!
@@ -29,18 +29,21 @@ module.exports = gql`
     username: String!
   }
   type Post {
-    id: ID!
+    id: ID
     body: String!
     createdAt: String
     username: String!
     comments: [Comment]!
     likes: [Like]!
+    likeCount: Int
+    commentCount: Int
   }
   type User {
     id: ID!
     email: String!
     token: String!
     username: String!
+    age: String
     createdAt: String!
     visited: [Country]!
   }
@@ -49,6 +52,7 @@ module.exports = gql`
     password: String!
     confirmPassword: String!
     email: String!
+    age: String
   }
   input CountryInput {
     name: String!
@@ -57,6 +61,7 @@ module.exports = gql`
     imgUrl: String!
   }
   type Query {
+    getUser(id: ID!): User
     getPosts: [Post]!
     getPost(postId: ID!): Post
     getCountries: [Country]!
@@ -74,8 +79,5 @@ module.exports = gql`
     createCountry(countryInput: CountryInput): [Country]!
     updateCountry(id: ID!, imgUrl: String!): [Country]!
     deleteCountry(id: ID!): [Country]!
-  }
-  type Subscription {
-    newPost: Post!
   }
 `;

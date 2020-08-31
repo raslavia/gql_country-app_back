@@ -31,10 +31,10 @@ module.exports = {
       { countryInput: { name, capital, continent, imgUrl } }
     ) => {
       const country = {
-        name: name,
-        capital: capital,
-        continent: continent,
-        imgUrl: imgUrl,
+        name,
+        capital,
+        continent: continent.toUpperCase(),
+        imgUrl,
       };
       countriesRefCrud.add({
         ...country,
@@ -65,12 +65,11 @@ module.exports = {
     },
     addCountry: async (_, { userId, countryId }, context) => {
       const user = checkAuth(context);
-      const data = await countryRef(countryId); 
-           
+      const data = await countryRef(countryId);
+
       if (user) {
         traveler = await User.findById(user.id);
         if (userId === traveler.id) {
-
           traveler.visited.push({
             ...data,
           });

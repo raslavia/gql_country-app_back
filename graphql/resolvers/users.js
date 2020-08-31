@@ -23,6 +23,20 @@ const generateToken = user => {
 };
 
 module.exports = {
+  Query: {
+    getUser: async (_, {id}) => {
+      try {
+        const user = await User.findById(id);
+        if (user) {
+          return user;
+        } else {
+          throw new Error("No user logged in");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+  },
   Mutation: {
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
@@ -51,13 +65,22 @@ module.exports = {
     },
     async register(
       parent,
-      { registerInput: { username, email, password, confirmPassword } }
+      {
+        registerInput: {
+          username,
+          email,
+          password,
+          confirmPassword,
+          age,
+        },
+      }
     ) {
       const { valid, errors } = validateRegisterInput(
         username,
         email,
         password,
-        confirmPassword
+        confirmPassword,
+        age
       );
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -77,6 +100,7 @@ module.exports = {
         username,
         password,
         email,
+        age,
         createdAt: new Date().toISOString(),
       });
 

@@ -1,18 +1,16 @@
-const { ApolloServer, PubSub } = require("apollo-server");
+const { ApolloServer } = require("apollo-server");
 const mongoose = require("mongoose");
 
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers/index");
 const { MONGODB } = require("./config");
 
-const pubsub = new PubSub();
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req, pubsub }),
+  context: ({ req }) => ({ req }),
 });
-//adding "CONTEXT" for later use in relover
+//adding "CONTEXT" for later use in resolver
 
 mongoose
   .connect(MONGODB, { useNewUrlParser: true })
@@ -22,6 +20,9 @@ mongoose
   })
   .then(res => {
     console.log(`Server running at ${res.url}`);
+  })
+  .catch(err => {
+    throw new Error(err);
   });
 // server.listen({ port: 5000 }).then(({ url }) => {
 //     console.log(`🚀  Server ready at ${url}`);

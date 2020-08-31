@@ -4,7 +4,12 @@ const coommentsResolvers = require("./comments");
 const countriesResolvers = require("./countries");
 
 module.exports = {
+  Post: {
+    likeCount: parent => parent.likes.length,
+    commentCount: parent => parent.comments.length,
+  },
   Query: {
+    ...userssResolvers.Query,
     ...postsResolvers.Query,
     ...countriesResolvers.Query,
   },
@@ -13,8 +18,5 @@ module.exports = {
     ...postsResolvers.Mutation,
     ...coommentsResolvers.Mutation,
     ...countriesResolvers.Mutation,
-  },
-  Subscription: {
-    ...postsResolvers.Subscription,
   },
 };
