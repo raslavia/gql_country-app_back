@@ -69,11 +69,13 @@ module.exports = {
 
       if (user) {
         traveler = await User.findById(user.id);
+        if (traveler.visited.find(c => c.id === countryId)) {
+          throw new UserInputError("Action not allowed, already added");
+        }
         if (userId === traveler.id) {
           traveler.visited.push({
             ...data,
           });
-
           await traveler.save();
           return traveler;
         } else {

@@ -6,6 +6,7 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   visited: [
     {
+      id: String,
       imgUrl: String,
       name: String,
       capital: String,

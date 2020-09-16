@@ -16,6 +16,9 @@ const generateToken = user => {
       id: user.id,
       email: user.email,
       username: user.username,
+      age: user.age,
+      createdat: user.createdAt,
+      visited: user.visited,
     },
     SECRET_KEY,
     { expiresIn: "1h" }
@@ -24,7 +27,7 @@ const generateToken = user => {
 
 module.exports = {
   Query: {
-    getUser: async (_, {id}) => {
+    getUser: async (_, { id }) => {
       try {
         const user = await User.findById(id);
         if (user) {
@@ -65,15 +68,7 @@ module.exports = {
     },
     async register(
       parent,
-      {
-        registerInput: {
-          username,
-          email,
-          password,
-          confirmPassword,
-          age,
-        },
-      }
+      { registerInput: { username, email, password, confirmPassword, age } }
     ) {
       const { valid, errors } = validateRegisterInput(
         username,
